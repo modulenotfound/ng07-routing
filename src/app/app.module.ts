@@ -7,15 +7,28 @@ import {RouterModule, Routes} from '@angular/router';
 import { FirstComponent } from './first/first.component';
 import { SecondComponent } from './second/second.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { AdminComponent } from './admin/admin.component';
+import {AuthGuard} from "./auth.guard";
+import {PendingChangesGuard} from "./pending-changes.guard";
 
 const appRoutes: Routes = [
   {
     path: 'component1',
-    component: FirstComponent
+    component: FirstComponent,
+    canDeactivate: [
+      PendingChangesGuard
+    ]
   },
   {
     path: 'component2',
     component: SecondComponent
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [
+      AuthGuard
+    ]
   },
   {
     path: '',
@@ -32,7 +45,8 @@ const appRoutes: Routes = [
     AppComponent,
     FirstComponent,
     SecondComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +55,10 @@ const appRoutes: Routes = [
       { enableTracing: true }
     )
   ],
-  providers: [],
+  providers: [
+    AuthGuard,
+    PendingChangesGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
